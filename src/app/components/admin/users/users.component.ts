@@ -6,18 +6,23 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { Order } from '../../../interfaces/order';
+import { Orderitem } from '../../../interfaces/orderitem';
+import { Pizza } from '../../../interfaces/pizza';
+import { NumberFormatPipe } from '../../../pipes/number-format.pipe';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,NumberFormatPipe],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
 export class UsersComponent implements OnInit{
   users : User[] = []
+  order_items : Orderitem[] =  []
+  pizzas: Pizza[] = []
   user: User = {
     id : 0,
     name: '',
@@ -38,12 +43,16 @@ export class UsersComponent implements OnInit{
   orders: Order[] = [] 
 ngOnInit(): void {
   this.getUsers()
+  this.getPizzas()
   this.detailsModal = new bootstrap.Modal('#detailsModal');
   this.confirmModal = new bootstrap.Modal('#confirmModal');
+  this.infoModal = new bootstrap.Modal('#infoModal');
+
 
 }
   detailsModal: any;
   confirmModal: any;
+  infoModal:any;
 
   
   constructor(
@@ -58,6 +67,11 @@ ngOnInit(): void {
         this.users = res.data
         this.totalPages = Math.ceil(this.users.length / this.pageSize);
         this.setPage(1)
+      })
+    }
+    getPizzas(){
+      this.api.selectAll("pizzas").then(res=>{
+        this.pizzas = res.data
       })
     }
     getUser(id: number) {
@@ -137,5 +151,11 @@ ngOnInit(): void {
         this.message.show("warning","Vigyázz!","Saját magad nem függesztheted fel!")
       }
       
+    }
+    OrderInfo(id:number){
+      this.api.select("order_items/order_id/eq",id).then(res=>{
+        this.order_items = res.data
+        this.infoModal.show()
+      })
     }
 }

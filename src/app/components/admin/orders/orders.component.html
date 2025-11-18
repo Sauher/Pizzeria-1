@@ -1,1 +1,55 @@
+<h1>Rendelések</h1>
 
+<table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Megrendelő neve</th>
+        <th>Megrendelő címe</th>
+        <th>Rendelés azonosítója</th>
+        <th>Rendelés dátuma</th>
+        <th>Státusz</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of pagedOrders; let i = index;">
+        <td>{{i+1}}</td>
+        <td>placeholder</td>
+        <td>placeholder</td>
+        <td class="text-center">{{order.id}}</td>
+        <td>{{order.created_at}}</td>
+        <td>{{order.status}}</td>
+        <td class="text-center"><button class="btn btn-success btn-sm" title="Kész" data-bs-toggle="modal" (click)="CompleteOrder(order.id)"><i class="bi bi-check-lg"></i></button></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="7">Megjelenítve: <strong> {{startIndex+1}} - {{endIndex}} / {{ orders.length}}</strong> rekord</td>
+      </tr>
+    </tfoot>
+  </table>
+  <nav aria-label="Page navigation example" *ngIf="totalPages > 1">
+    <ul class="pagination">
+  
+      <li class="page-item">
+        <a class="page-link" aria-label="Previous" (click)="setPage(currentPage-1)" [class.disabled]="currentPage == 1">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+  
+  
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index">
+        <a class="page-link" (click)="setPage(i+1)" [class.active]="currentPage == i + 1">{{ i+1 }}</a>
+      </li>
+  
+  
+      <li class="page-item">
+        <a class="page-link" aria-label="Next" (click)="setPage(currentPage+1)"
+          [class.disabled]="currentPage == totalPages">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+  
+    </ul>
+  </nav>

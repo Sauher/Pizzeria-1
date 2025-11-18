@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export class NumberFormatPipe implements PipeTransform {
 
-  transform(value: number | string | null | undefined, decimalPlaces: number = 0, locale: string = 'hu-HU'): string {
+  transform(value: number | string | null | undefined, decimalPlaces: number = 0, locale: string = 'de-DE'): string {
     if (value === null || value === undefined || isNaN(Number(value))){
       return '-';
     }
