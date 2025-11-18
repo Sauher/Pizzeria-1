@@ -1,0 +1,191 @@
+<h3>Felhasználók kezelése</h3>
+
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Név</th>
+      <th>Email-cím</th>
+      <th>Telefonszám</th>
+      <th>Cím</th>
+      <th>Role</th>
+      <th>Státusz</th>
+      <th>Műveletek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of pagedUsers; let i = index;" [ngClass]="{'inactive': !user.status}">
+      <td>{{ i +1 }}.</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.phone }}</td>
+      <td>{{ user.address }}</td>
+      <td>{{user.role}}</td>
+      <td>{{user.status ? "Aktív" : "Felfüggesztve"}}</td>
+      <td class="text-end">
+        <button class="btn btn-secondary btn-sm me-2" title="Módosítás" (click)="getUser(user.id)"><i class="bi bi-info-lg"></i></button>
+        <button class="btn btn-danger btn-sm" title="Felfüggesztés" data-bs-toggle="modal" (click)="confirmDelete(user.id)"><i class="bi bi-ban"></i></button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="7">Megjelenítve: <strong> {{startIndex+1}} - {{endIndex}} / {{ users.length}}</strong> rekord</td>
+    </tr>
+  </tfoot>
+</table>
+
+<nav aria-label="Page navigation example" *ngIf="totalPages > 1">
+  <ul class="pagination">
+
+    <li class="page-item">
+      <a class="page-link" aria-label="Previous" (click)="setPage(currentPage-1)" [class.disabled]="currentPage == 1">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+
+
+    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index">
+      <a class="page-link" (click)="setPage(i+1)" [class.active]="currentPage == i + 1">{{ i+1 }}</a>
+    </li>
+
+
+    <li class="page-item">
+      <a class="page-link" aria-label="Next" (click)="setPage(currentPage+1)"
+        [class.disabled]="currentPage == totalPages">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+
+  </ul>
+</nav>
+
+
+
+<!-- Form Modal -->
+<div class="modal modal-xl fade" id="detailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailsModalLabel">Részletek</h1>
+        <button type="button" class="btn-close" (click)="cancel()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-tab-pane" type="button" role="tab" aria-controls="user-tab-pane" aria-selected="true">Felhasználó adatok</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders-tab-pane" type="button" role="tab" aria-controls="orders-tab-pane" aria-selected="false">Rendelések</button>
+  </li>
+
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Tulajdonság</th>
+          <th>Érték</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td>Név:</td>
+            <td>{{selectedUser.name}}</td>
+        </tr>
+        <tr>
+          <td>E-mail:</td>
+          <td>{{selectedUser.email}}</td>
+      </tr>
+      <tr>
+        <td>Telefonszám:</td>
+        <td>{{selectedUser.phone}}</td>
+    </tr>
+    <tr>
+      <td>Cím::</td>
+      <td>{{selectedUser.address}}</td>
+    </tr>
+    <tr>
+      <td>Regisztráció dátuma:</td>
+      <td>{{selectedUser.reg}}</td>
+    </tr>
+    <tr>
+      <td>Utolsó belépés dátuma: </td>
+      <td>{{selectedUser.last}}</td>
+    </tr>
+    <tr>
+      <td>Jogosultság:</td>
+      <td>{{selectedUser.role}}</td>
+    </tr>
+    <tr>
+      <td>Státusz:</td>
+      <td>{{selectedUser.status? "Aktív" : "Inaktív"}}</td>
+    </tr>
+      </tbody>
+      
+      <tfoot>
+    
+      </tfoot>
+    </table>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cancel()">
+              <i class="bi bi-x-circle"></i>&nbsp;&nbsp;Vissza
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="tab-pane fade" id="orders-tab-pane" role="tabpanel" aria-labelledby="orders-tab" tabindex="0">
+
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders; let i = index;">
+          <td>{{i+1}}.</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr></tr>
+      </tfoot>
+    </table>
+  </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="confirmModalLabel">Megerősítés</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <i class="bi bi-question-circle"></i>&nbsp;&nbsp;{{this.user.status?"Biztosan szeretnéd visszavonni a felfüggesztést?":  "Biztosan szeretnéd felfüggeszteni?"}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle"></i>&nbsp;&nbsp;Mégem
+        </button>
+        <button type="button" class="btn btn-success" (click)="suspend(user.id)">
+          <i class="bi bi-check-lg"></i>&nbsp;&nbsp;Igen
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
