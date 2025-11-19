@@ -72,7 +72,21 @@ export class OrdersComponent implements OnInit {
     this.endIndex = this.startIndex + this.pageSize;
     this.pagedOrders = this.orders.slice(this.startIndex, this.endIndex);
   }
-  CompleteOrder(id: number) {
+  
+  ChangeOrderStatus(id:number){
+    let order = this.orders.find(item => item.id == id);
 
+    if (order?.status == "pending") {
+      order.status = "completed"
+    }
+    else{
+      order!.status = "pending"
+    }
+
+    this.api.update("orders",id,order).then(res =>
+    {
+      this.message.show("success","OK","Státusz sikeresen megváltoztatva!")
+    }
+    )
   }
 }

@@ -15,12 +15,13 @@
     <tbody>
       <tr *ngFor="let order of pagedOrders; let i = index;">
         <td>{{i+1}}</td>
-        <td>placeholder</td>
-        <td>placeholder</td>
+        <td>{{users[i].name}}</td>
+        <td>{{users[i].address}}</td>
         <td class="text-center">{{order.id}}</td>
         <td>{{order.created_at}}</td>
         <td>{{order.status}}</td>
-        <td class="text-center"><button class="btn btn-success btn-sm" title="Kész" data-bs-toggle="modal" (click)="CompleteOrder(order.id)"><i class="bi bi-check-lg"></i></button></td>
+        <td class="text-center"><button class="btn btn-success btn-sm" title="Kész" data-bs-toggle="modal" *ngIf="order.status == 'pending'" (click)="ChangeOrderStatus(order.id)"><i class="bi bi-check-lg"></i></button></td>
+        <td class="text-center"><button class="btn btn-warning btn-sm" title="Pend" data-bs-toggle="modal" *ngIf="order.status == 'completed'" (click)="ChangeOrderStatus(order.id)"><i class="bi bi-ban"></i></button></td>
       </tr>
     </tbody>
     <tfoot>

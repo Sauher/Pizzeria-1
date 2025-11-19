@@ -178,5 +178,19 @@ export class ApiService {
       };
     }
   }
+  async SendMail(data: object): Promise<ApiResponse> {
+    try{
+      const response = await axios.post(`${this.SERVER}/sendmail`,data);
+      return {
+        status: 200,
+        message: response.data.message
 
+      };
+    }catch(error: any){
+      return {
+        status: 500,
+        message: 'Hiba történt a művelet során!'
+      };
+    }
+  }
 }

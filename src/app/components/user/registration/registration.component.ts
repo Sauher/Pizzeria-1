@@ -21,7 +21,7 @@ export class RegistrationComponent {
   acceptTerms: boolean = false;
 
   newUser: User = {
-    id:0,
+    id: 0,
     name: '',
     email: '',
     password: '',
@@ -41,10 +41,22 @@ export class RegistrationComponent {
     }
 
     this.api.registration('users', this.newUser).then(res => {
-      if (res.status == 500){
+      if (res.status == 500) {
         this.message.show('danger', 'Hiba', res.message);
         return;
       }
+      let data = {
+        "template": "registration",
+        "to": this.newUser.email,
+        "subject": "Sikeres Regisztráció!",
+        "data": {
+          "username": this.newUser.name,
+          "email": this.newUser.email,
+          "password": this.newUser.password,
+          "url": "http://localhost:4200"
+        }
+      }
+      this.api.SendMail(data)
       this.message.show('success', 'Ok', res.message);
       this.router.navigate(['/login']);
     })
